@@ -3,7 +3,7 @@ Sub DateWizzard(CaseCode As Integer)
               
 ' Создание массива с названиями месяцев
 
-  Dim Month, Counter, MonthRoman, MonthArabic, InnormalMonth, 
+  Dim Month, Counter, MonthRoman, MonthArabic, InnormalMonth 
 ' Названия месяцев для арабских чисел
   Month = Array("декабря", "ноября", "октября", "января", "февраля", "марта", "апреля", _
                 "мая", "июня", "июля", "августа", "сентября")
@@ -50,10 +50,7 @@ Sub DateWizzard(CaseCode As Integer)
             
     ' Осуществление замены по указанным выше шаблонам
     With ActiveDocument.Content.Find
-      .Execute FindText:=OriginalText, 
-               MatchWildcards:=True, 
-               ReplaceWith:=ReplacedText, 
-               Replace:=wdReplaceAll
+      .Execute FindText:=OriginalText, MatchWildcards:=True, ReplaceWith:=ReplacedText, Replace:=wdReplaceAll
     End With
                         
     Counter = Counter + 1
