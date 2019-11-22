@@ -1,4 +1,4 @@
-Sub replaceWizzard (originalText, replasedText)
+Sub replaceWizzard(originalText, replasedText)
     Selection.Find.ClearFormatting
     Selection.Find.Replacement.ClearFormatting
     With Selection.Find.Replacement.Font
@@ -41,7 +41,7 @@ With MyRange.ParagraphFormat
     .SpaceAfter = 0
     .LineSpacingRule = wdLineSpaceSingle
     .FirstLineIndent = CentimetersToPoints(0)
-    .LineSpacingRule = wdLineSpaceAtLeast 
+    .LineSpacingRule = wdLineSpaceAtLeast
     .LineSpacing = 1
 End With
 
@@ -54,7 +54,7 @@ replaceWizzard " ^p", "^p"
 replaceWizzard "^p", "^p"
 ' удаление всех двойных абзацев
 replaceWizzard "^p^p^p", "^p^p"
-' в MsgBox будет ещё предупреждение, если будут в тексте ещё две пустые строки. 
+' в MsgBox будет ещё предупреждение, если будут в тексте ещё две пустые строки.
 ' Решить проблему циклом нельзя: уходит в бесконечный цикл
 
 ' убираются специальные ненужные знаки
@@ -69,9 +69,9 @@ replaceWizzard " ", " "
 ' Замена заголовков
 replaceWizzard "###", "### "
 ' удаление всех двойных пробелов
-' deleteCircle "  ", " "
 flag = True
-While flag = True 
+While flag = True
+    Set MyRange = ActiveDocument.Content
     replaceWizzard "  ", " "
     MyRange.Find.Execute FindText:="  "
     If MyRange.Find.Found = False Then flag = False
@@ -90,66 +90,58 @@ replaceWizzard " - ", " — "
 replaceWizzard "–", "—"
 
 ' сообщение, если есть сноски  нестандартного вида
-message = "Обработка закончена" + Chr(13)
+Message = "Обработка закончена" + Chr(13)
 
+Set MyRange = ActiveDocument.Content
 With MyRange.Find
     .Font.Bold = True
     .Execute FindText:="^f"
     If MyRange.Find.Found = True Then
-        message = message + "ATTENTION! Сноски жирные" + Chr(13)
+        Message = Message + "ATTENTION! Сноски жирные" + Chr(13)
     End If
 End With
 
+Set MyRange = ActiveDocument.Content
 With MyRange.Find
     .Font.Italic = True
     .Execute FindText:="^f"
     If MyRange.Find.Found = True Then
-        message = message + "ATTENTION! Сноски курсивные" + Chr(13)
+        Message = Message + "ATTENTION! Сноски курсивные" + Chr(13)
     End If
 End With
 
+Set MyRange = ActiveDocument.Content
 With MyRange.Find
     .Font.Underline = True
     .Execute FindText:="^f"
     If MyRange.Find.Found = True Then
-        message = message + "ATTENTION! Сноски подчёркнутые" + Chr(13)
+        Message = Message + "ATTENTION! Сноски подчёркнутые" + Chr(13)
     End If
 End With
 
+Set MyRange = ActiveDocument.Content
 With MyRange.Find
     .Font.StrikeThrough = True
     .Execute FindText:="^f"
     If MyRange.Find.Found = True Then
-        message = message + "ATTENTION! Сноски зачёркнутые" + Chr(13)
+        Message = Message + "ATTENTION! Сноски зачёркнутые" + Chr(13)
     End If
 End With
 
 With MyRange.Find
     .Execute FindText:="- "
     If MyRange.Find.Found = True Then
-        message = message + "ATTENTION! тире-пробел" + Chr(13)
+        Message = Message + "ATTENTION! тире-пробел" + Chr(13)
     End If
 End With
 
 With MyRange.Find
     .Execute FindText:="^p^p^p"
     If MyRange.Find.Found = True Then
-        message = message + "ATTENTION! две пустые строки" + Chr(13)
+        Message = Message + "ATTENTION! две пустые строки" + Chr(13)
     End If
 End With
     
-signal = MsgBox(message, vbInformation, "Обработка текстов")
+signal = MsgBox(Message, vbInformation, "Обработка текстов")
 
-End Sub
-
-Sub deleteCircle (originalText, replasedText)
-    Dim flag As Boolean
-    MyRange = ActiveDocument.Content
-    While flag
-        replaceWizzard originalText, replasedText
-        MyRange.Find.Execute FindText:=originalText
-        If MyRange.Find.Found = False Then
-            flag = False
-        End if
-    Wend
 End Sub
