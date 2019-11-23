@@ -1,257 +1,15 @@
-Attribute VB_Name = "Module1"
-
-Sub Стандартизатор()
-Selection.WholeStory
-
-' Меняем  шрифт
-With Selection.Font
-    .Name = "Calibri"
-    .Size = 12
-    .ColorIndex = wdBlack
-End With
-
-' Меняем параметры абзаца
-With Selection.ParagraphFormat
-    .LeftIndent = CentimetersToPoints(0)
-    .RightIndent = CentimetersToPoints(0)
-    .SpaceBefore = 0
-    .SpaceAfter = 0
-    .LineSpacingRule = wdLineSpaceSingle
-    .FirstLineIndent = CentimetersToPoints(0)
-End With
-
-' Замена абзацев
-
-Selection.Find.ClearFormatting
-    Selection.Find.Replacement.ClearFormatting
-    With Selection.Find.Replacement.Font
-        .Bold = False
-        .Italic = False
-        .Underline = False
-        .StrikeThrough = False
-    End With
-    With Selection.Find
-        .Text = "^p "
-        .Replacement.Text = "^p"
-        .Forward = True
-        .Wrap = wdFindContinue
-        .Format = True
-        .MatchCase = False
-        .MatchWholeWord = False
-        .MatchWildcards = False
-        .MatchSoundsLike = False
-        .MatchAllWordForms = False
-    End With
-    Selection.Find.Execute Replace:=wdReplaceAll
-
-Selection.Find.ClearFormatting
-    Selection.Find.Replacement.ClearFormatting
-    With Selection.Find.Replacement.Font
-        .Bold = False
-        .Italic = False
-        .Underline = False
-        .StrikeThrough = False
-    End With
-    With Selection.Find
-        .Text = "^p"
-        .Replacement.Text = "^p"
-        .Forward = True
-        .Wrap = wdFindContinue
-        .Format = True
-        .MatchCase = False
-        .MatchWholeWord = False
-        .MatchWildcards = False
-        .MatchSoundsLike = False
-        .MatchAllWordForms = False
-    End With
-    Selection.Find.Execute Replace:=wdReplaceAll
-
-Selection.Find.ClearFormatting
-    Selection.Find.Replacement.ClearFormatting
-    With Selection.Find.Replacement.Font
-        .Bold = False
-        .Italic = False
-        .Underline = False
-        .StrikeThrough = False
-    End With
-    With Selection.Find
-        .Text = "^l"
-        .Replacement.Text = "^p"
-        .Forward = True
-        .Wrap = wdFindContinue
-        .Format = True
-        .MatchCase = False
-        .MatchWholeWord = False
-        .MatchWildcards = False
-        .MatchSoundsLike = False
-        .MatchAllWordForms = False
-    End With
-    Selection.Find.Execute Replace:=wdReplaceAll
-
-Selection.Find.ClearFormatting
-    Selection.Find.Replacement.ClearFormatting
-    With Selection.Find.Replacement.Font
-        .Bold = False
-        .Italic = False
-        .Underline = False
-        .StrikeThrough = False
-    End With
-    With Selection.Find
-        .Text = "^s"
-        .Replacement.Text = " "
-        .Forward = True
-        .Wrap = wdFindContinue
-        .Format = True
-        .MatchCase = False
-        .MatchWholeWord = False
-        .MatchWildcards = False
-        .MatchSoundsLike = False
-        .MatchAllWordForms = False
-    End With
-    Selection.Find.Execute Replace:=wdReplaceAll
-
-Selection.Find.ClearFormatting
-    Selection.Find.Replacement.ClearFormatting
-    With Selection.Find.Replacement.Font
-        .Bold = False
-        .Italic = False
-        .Underline = False
-        .StrikeThrough = False
-    End With
-    With Selection.Find
-        .Text = "^t"
-        .Replacement.Text = ""
-        .Forward = True
-        .Wrap = wdFindContinue
-        .Format = True
-        .MatchCase = False
-        .MatchWholeWord = False
-        .MatchWildcards = False
-        .MatchSoundsLike = False
-        .MatchAllWordForms = False
-    End With
-    Selection.Find.Execute Replace:=wdReplaceAll
-
-' Замена цитат
-Selection.Find.ClearFormatting
-    Selection.Find.Replacement.ClearFormatting
-    With Selection.Find.Replacement.Font
-        .Bold = False
-        .Italic = False
-        .Underline = False
-        .StrikeThrough = False
-    End With
-    With Selection.Find
-        .Text = ">"
-        .Replacement.Text = ">"
-        .Forward = True
-        .Wrap = wdFindContinue
-        .Format = True
-        .MatchCase = False
-        .MatchWholeWord = False
-        .MatchWildcards = False
-        .MatchSoundsLike = False
-        .MatchAllWordForms = False
-    End With
-    Selection.Find.Execute Replace:=wdReplaceAll
-
-Selection.Find.ClearFormatting
-    Selection.Find.Replacement.ClearFormatting
-    With Selection.Find.Replacement.Font
-        .Bold = False
-        .Italic = False
-        .Underline = False
-        .StrikeThrough = False
-    End With
-    With Selection.Find
-        .Text = "^p>^p"
-        .Replacement.Text = "^p   ^p"
-        .Forward = True
-        .Wrap = wdFindContinue
-        .Format = True
-        .MatchCase = False
-        .MatchWholeWord = False
-        .MatchWildcards = False
-        .MatchSoundsLike = False
-        .MatchAllWordForms = False
-    End With
-    Selection.Find.Execute Replace:=wdReplaceAll
-
-' Замена заголовков
-Selection.Find.ClearFormatting
-    Selection.Find.Replacement.ClearFormatting
-    With Selection.Find.Replacement.Font
-        .Bold = False
-        .Italic = False
-        .Underline = False
-        .StrikeThrough = False
-    End With
-    With Selection.Find
-        .Text = "###"
-        .Replacement.Text = "### "
-        .Forward = True
-        .Wrap = wdFindContinue
-        .Format = True
-        .MatchCase = False
-        .MatchWholeWord = False
-        .MatchWildcards = False
-        .MatchSoundsLike = False
-        .MatchAllWordForms = False
-    End With
-    Selection.Find.Execute Replace:=wdReplaceAll
-    
-Selection.Find.ClearFormatting
-    Selection.Find.Replacement.ClearFormatting
-    With Selection.Find.Replacement.Font
-        .Bold = False
-        .Italic = False
-        .Underline = False
-        .StrikeThrough = False
-    End With
-    With Selection.Find
-        .Text = "###  "
-        .Replacement.Text = "### "
-        .Forward = True
-        .Wrap = wdFindContinue
-        .Format = True
-        .MatchCase = False
-        .MatchWholeWord = False
-        .MatchWildcards = False
-        .MatchSoundsLike = False
-        .MatchAllWordForms = False
-    End With
-    Selection.Find.Execute Replace:=wdReplaceAll
-
-' Замена тире и прочей фигни
-Selection.Find.ClearFormatting
-    Selection.Find.Replacement.ClearFormatting
-    With Selection.Find.Replacement.Font
-        .Bold = False
-        .Italic = False
-    End With
-    With Selection.Find
-        .Text = " - "
-        .Replacement.Text = " — "
-        .Forward = True
-        .Wrap = wdFindContinue
-        .Format = True
-        .MatchCase = False
-        .MatchWholeWord = False
-        .MatchWildcards = False
-        .MatchSoundsLike = False
-        .MatchAllWordForms = False
-    End With
-    Selection.Find.Execute Replace:=wdReplaceAll
-    
+Sub replaceWizzard(originalText, replasedText)
     Selection.Find.ClearFormatting
     Selection.Find.Replacement.ClearFormatting
     With Selection.Find.Replacement.Font
         .Bold = False
         .Italic = False
+        .Underline = False
+        .StrikeThrough = False
     End With
     With Selection.Find
-        .Text = "–"
-        .Replacement.Text = "—"
+        .Text = originalText
+        .Replacement.Text = replasedText
         .Forward = True
         .Wrap = wdFindContinue
         .Format = True
@@ -262,55 +20,138 @@ Selection.Find.ClearFormatting
         .MatchAllWordForms = False
     End With
     Selection.Find.Execute Replace:=wdReplaceAll
-    
-' сообщение, если есть сноски  нестандартного вида
-massage = "Обработка закончена" + Chr(13)
+End Sub
 
-Set MyRange = ActiveDocument.Content
-With MyRange.Find
-    .Font.Bold = True
-    .Execute FindText:="^f"
-    If MyRange.Find.Found = True Then
-        massage = massage + "ATTENTION! Сноски жирные" + Chr(13)
-    End If
-End With
+Sub Стандартизатор2()
 
-Set MyRange = ActiveDocument.Content
-With MyRange.Find
-    .Font.Italic = True
-    .Execute FindText:="^f"
-    If MyRange.Find.Found = True Then
-        massage = massage + "ATTENTION! Сноски курсивные" + Chr(13)
-    End If
-End With
+    Set MyRange = ActiveDocument.Content
 
-Set MyRange = ActiveDocument.Content
-With MyRange.Find
-    .Font.Underline = True
-    .Execute FindText:="^f"
-    If MyRange.Find.Found = True Then
-        massage = massage + "ATTENTION! Сноски подчёркнутые" + Chr(13)
-    End If
-End With
+    ' Первоначальное форматирование текста
+    ' Меняем  шрифт
+    With MyRange.Font
+        .Name = "Calibri"
+        .Size = 12
+    End With
 
-Set MyRange = ActiveDocument.Content
-With MyRange.Find
-    .Font.StrikeThrough = True
-    .Execute FindText:="^f"
-    If MyRange.Find.Found = True Then
-        massage = massage + "ATTENTION! Сноски зачёркнутые" + Chr(13)
-    End If
-End With
+    ' Меняем параметры абзаца
+    With MyRange.ParagraphFormat
+        .LeftIndent = CentimetersToPoints(0)
+        .RightIndent = CentimetersToPoints(0)
+        .SpaceBefore = 0
+        .SpaceAfter = 0
+        .LineSpacingRule = wdLineSpaceSingle
+        .FirstLineIndent = CentimetersToPoints(0)
+        .LineSpacingRule = wdLineSpaceAtLeast
+        .LineSpacing = 1
+    End With
+
+    ' Замена абзацев
+    ' "^l" -> "^p"
+    replaceWizzard "^l", "^p"
+    ' " ^p" -> "^p"
+    flag = True
+    While flag = True
+        Set MyRange = ActiveDocument.Content
+        replaceWizzard " ^p", "^p"
+        MyRange.Find.Execute FindText:=" ^p"
+        If MyRange.Find.Found = False Then flag = False
+    Wend
+    ' форматирование всех концов абзаца
+    replaceWizzard "^p", "^p"
+    ' удаление всех двойных абзацев
+    flag = True
+    While flag = True
+        Set MyRange = ActiveDocument.Content
+        replaceWizzard "^p^p^p", "^p^p"
+        MyRange.Find.Execute FindText:="^p^p^p"
+        If MyRange.Find.Found = False Then flag = False
+    Wend
+
+    ' убираются специальные ненужные знаки
+    ' удаление неразрывных пробелов
+    replaceWizzard "^s", " "
+    replaceWizzard "^-", ""
+    ' удаление табуляции
+    flag = True
+    While flag = True
+        Set MyRange = ActiveDocument.Content
+        replaceWizzard "^t", " "
+        MyRange.Find.Execute FindText:="^t"
+        If MyRange.Find.Found = False Then flag = False
+    Wend
+
+    ' форматирование всех пробелов
+    replaceWizzard " ", " "
+    ' Замена заголовков
+    replaceWizzard "###", "### "
+    ' удаление всех двойных пробелов
+    flag = True
+    While flag = True
+        Set MyRange = ActiveDocument.Content
+        replaceWizzard "  ", " "
+        MyRange.Find.Execute FindText:="  "
+        If MyRange.Find.Found = False Then flag = False
+    Wend
+    ' "^p " -> "^p"
+    replaceWizzard "^p ", "^p"
+
+    ' Замена цитат
+    replaceWizzard ">", ">"
+    replaceWizzard "^p>^p", "^p     ^p"
+
+    ' Замена тире и прочей фигни
+    ' дефис -> длинное тире
+    replaceWizzard " - ", " — "
+    ' короткое тире -> длинное тире
+    replaceWizzard "–", "—"
+
+    ' сообщение, если есть сноски  нестандартного вида
+    Message = "Обработка закончена" + Chr(13)
+
+    Set MyRange = ActiveDocument.Content
+    With MyRange.Find
+        .Font.Bold = True
+        .Execute FindText:="^f"
+        If MyRange.Find.Found = True Then
+            Message = Message + "ATTENTION! Сноски жирные" + Chr(13)
+        End If
+    End With
+
+    Set MyRange = ActiveDocument.Content
+    With MyRange.Find
+        .Font.Italic = True
+        .Execute FindText:="^f"
+        If MyRange.Find.Found = True Then
+            Message = Message + "ATTENTION! Сноски курсивные" + Chr(13)
+        End If
+    End With
+
+    Set MyRange = ActiveDocument.Content
+    With MyRange.Find
+        .Font.Underline = True
+        .Execute FindText:="^f"
+        If MyRange.Find.Found = True Then
+            Message = Message + "ATTENTION! Сноски подчёркнутые" + Chr(13)
+        End If
+    End With
+
+    Set MyRange = ActiveDocument.Content
+    With MyRange.Find
+        .Font.StrikeThrough = True
+        .Execute FindText:="^f"
+        If MyRange.Find.Found = True Then
+            Message = Message + "ATTENTION! Сноски зачёркнутые" + Chr(13)
+        End If
+    End With
+
+    Set MyRange = ActiveDocument.Content
+    With MyRange.Find
+        .Execute FindText:="- "
+        If MyRange.Find.Found = True Then
+            Message = Message + "ATTENTION! тире-пробел" + Chr(13)
+        End If
+    End With
         
-Set MyRange = ActiveDocument.Content
-With MyRange.Find
-    .Execute FindText:="- "
-    If MyRange.Find.Found = True Then
-        massage = massage + "ATTENTION! тире-пробел" + Chr(13)
-    End If
-End With
-    
-signal = MsgBox(massage, vbInformation, "Обработка текстов")
-
+    signal = MsgBox(Message, vbInformation, "Обработка текстов")
 
 End Sub
