@@ -28,13 +28,15 @@ Sub Стандартизатор2()
 
     ' Первоначальное форматирование текста
     ' Меняем  шрифт
-    With MyRange.Font
-        .Name = "Calibri"
-        .Size = 12
+    Selection.WholeStory
+    With Selection.Font
+    .Name = "Calibri"
+    .Size = 12
+    '.ColorIndex = wdBlack
     End With
 
     ' Меняем параметры абзаца
-    With MyRange.ParagraphFormat
+    With Selection.ParagraphFormat
         .LeftIndent = CentimetersToPoints(0)
         .RightIndent = CentimetersToPoints(0)
         .SpaceBefore = 0
@@ -49,37 +51,19 @@ Sub Стандартизатор2()
     ' "^l" -> "^p"
     replaceWizzard "^l", "^p"
     ' " ^p" -> "^p"
-    flag = True
-    While flag = True
-        Set MyRange = ActiveDocument.Content
-        replaceWizzard " ^p", "^p"
-        MyRange.Find.Execute FindText:=" ^p"
-        If MyRange.Find.Found = False Then flag = False
-    Wend
+    replaceWizzard " ^p", "^p"
     ' форматирование всех концов абзаца
     replaceWizzard "^p", "^p"
     ' удаление всех двойных абзацев
-    flag = True
-    While flag = True
-        Set MyRange = ActiveDocument.Content
-        replaceWizzard "^p^p^p", "^p^p"
-        MyRange.Find.Execute FindText:="^p^p^p"
-        If MyRange.Find.Found = False Then flag = False
-    Wend
-
+    replaceWizzard "^p^p^p", "^p^p"
+   
     ' убираются специальные ненужные знаки
     ' удаление неразрывных пробелов
     replaceWizzard "^s", " "
     replaceWizzard "^-", ""
     ' удаление табуляции
-    flag = True
-    While flag = True
-        Set MyRange = ActiveDocument.Content
-        replaceWizzard "^t", " "
-        MyRange.Find.Execute FindText:="^t"
-        If MyRange.Find.Found = False Then flag = False
-    Wend
-
+    replaceWizzard "^t", " "
+    
     ' форматирование всех пробелов
     replaceWizzard " ", " "
     ' Замена заголовков
@@ -104,7 +88,21 @@ Sub Стандартизатор2()
     replaceWizzard " - ", " — "
     ' короткое тире -> длинное тире
     replaceWizzard "–", "—"
-
+    ' [пробел][знак препинания] -> [знак препинания]
+    punctuationMark1 = Array(".", ",", ":", ";", ")", "]", "!", "?")
+    For Each Mark In punctuationMark1
+        oT = " " + Mark
+        rT = Mark
+        replaceWizzard oT, rT
+    Next
+    ' [знак препинания][пробел] -> [знак препинания]
+    punctuationMark2 = Array("(", "[")
+    For Each Mark In punctuationMark2
+        oT = Mark + " "
+        rT = Mark
+        replaceWizzard oT, rT
+    Next
+    
     ' сообщение, если есть сноски  нестандартного вида
     Message = "Обработка закончена" + Chr(13)
 
