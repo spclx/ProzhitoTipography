@@ -32,7 +32,6 @@ Sub Стандартизатор2()
     With Selection.Font
     .Name = "Calibri"
     .Size = 12
-    '.ColorIndex = wdBlack
     End With
 
     ' Меняем параметры абзаца
@@ -68,6 +67,7 @@ Sub Стандартизатор2()
     replaceWizzard " ", " "
     ' Замена заголовков
     replaceWizzard "###", "### "
+  
     ' удаление всех двойных пробелов
     flag = True
     While flag = True
@@ -89,6 +89,7 @@ Sub Стандартизатор2()
     ' короткое тире -> длинное тире
     replaceWizzard "–", "—"
     ' [пробел][знак препинания] -> [знак препинания]
+    'Dim punctuationMark1, Mark;
     punctuationMark1 = Array(".", ",", ":", ";", ")", "]", "!", "?")
     For Each Mark In punctuationMark1
         oT = " " + Mark
@@ -102,7 +103,16 @@ Sub Стандартизатор2()
         rT = Mark
         replaceWizzard oT, rT
     Next
-    
+
+    ' удаление лишних пробелов в частицах и некоторых предлогах
+    particles = Array("то", "таки", "нибудь", "ка", "за", "под")
+    For Each Particle In particles
+        oT = "- " + Particle
+        rT = "-" + Particle
+        replaceWizzard oT, rT
+    Next
+    ' оставльные случаи дефис-пробел будут предупреждаться в Message Box
+
     ' сообщение, если есть сноски  нестандартного вида
     Message = "Обработка закончена" + Chr(13)
 
