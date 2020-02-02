@@ -22,8 +22,69 @@ Sub replaceWizzard(originalText, replasedText)
     Selection.Find.Execute Replace:=wdReplaceAll
 End Sub
 
-Sub PracticeHelper()
+Sub DateWizzard()
+    replaceWizzard " ^p", "^p"
+    
+    d = Array("января", "февраля", "марта", "апреля", "мая", "июня", "июля", _
+    "августа", "сентября", "октября", "ноября", "декабря", "Января", "Февраля", _
+    "Марта", "Апреля", "Мая", "Июня", "Июля", _
+    "Августа", "Сентября", "Октября", "Ноября", "Декабря", "XII", "XI", "X", _
+    "VIII", "VII", "VI", "V", "IX", "IХ", "IV", "III", "II", "I", "ХII", "ХI", _
+    "Х", "12", "11", "10", "09", "08", "07", "06", "05", "04", "03", "02", "01", _
+    "9", "8", "7", "6", "5", "4", "3", "2", "1")
+    
+    ' исправляет случаи ^p[date]^p
+    For Each i In d
+        ' case XX[]XX[]XXXX
+        originalText = "(^0013)([0-9]{1;2})[\.\-\/\\ ](" & i & ")[\.\-\/\\ ]([0-9]{1;4})(^0013)"
+        ReplacedText = "\1\1?\2 " & i & "."
+        With ActiveDocument.Content.Find
+            .Execute FindText:=originalText, MatchWildcards:=True, ReplaceWith:=ReplacedText, Replace:=wdReplaceAll
+        End With
 
+        ' case XX[]XX
+        originalText = "(^0013)([0-9]{1;2})[\.\-\/\\ ](" & i & ")(^0013)"
+        ReplacedText = "\1\1?\2 " & i & ". "
+        With ActiveDocument.Content.Find
+            .Execute FindText:=originalText, MatchWildcards:=True, ReplaceWith:=ReplacedText, Replace:=wdReplaceAll
+        End With
+    Next
+    ' исправляет случаи ^p[date]
+    For Each i In d
+        ' case XX[]XX[]XXXX
+        originalText = "(^0013)([0-9]{1;2})[\.\-\/\\ ](" & i & ")[\.\-\/\\ ]([0-9]{1;4})"
+        ReplacedText = "\1\1?\2 " & i & " \4. "
+        With ActiveDocument.Content.Find
+            .Execute FindText:=originalText, MatchWildcards:=True, ReplaceWith:=ReplacedText, Replace:=wdReplaceAll
+        End With
+
+        ' case XX[]XX
+        originalText = "(^0013)([0-9]{1;2})[\.\-\/\\ ](" & i & ")"
+        ReplacedText = "\1\1?\2 " & i & ". "
+        With ActiveDocument.Content.Find
+            .Execute FindText:=originalText, MatchWildcards:=True, ReplaceWith:=ReplacedText, Replace:=wdReplaceAll
+        End With
+    Next
+    
+    ' надо удалить возможные двойные пустые строки...
+    With ActiveDocument.Content.Find
+        .Execute FindText:="^p^p^p", ReplaceWith:="^p^p", Replace:=wdReplaceAll
+    End With
+    ' ... и прочие артефакты
+    replaceWizzard ".. .", "..."
+    
+    replaceWizzard "..", "."
+    replaceWizzard "^p?", "^p"
+    replaceWizzard "  г.", " "
+    replaceWizzard "  года.", " "
+    replaceWizzard "  год.", " "
+    
+    replaceWizzard "  ", " "
+    replaceWizzard ". . ", ". "
+    replaceWizzard ". .^p", ". "
+End Sub
+
+Sub PracticeHelper()
     Set MyRange = ActiveDocument.Content
 
     ' Первоначальное форматирование текста
@@ -45,7 +106,7 @@ Sub PracticeHelper()
         .LineSpacingRule = wdLineSpaceAtLeast
         .LineSpacing = 1
     End With
-
+    
     ' Замена абзацев
     ' "^l" -> "^p"
     replaceWizzard "^l", "^p"
@@ -83,67 +144,30 @@ Sub PracticeHelper()
         .Format = True
         .Execute Replace:=wdReplaceAll
     End With
-
-    ' Дальше идёт интеграция датизатора
     
-    d = Array("января", "февраля", "марта", "апреля", "мая", "июня", "июля", _
-    "августа", "сентября", "октября", "ноября", "декабря", "Января", "Февраля", _
-    "Марта", "Апреля", "Мая", "Июня", "Июля", _
-    "Августа", "Сентября", "Октября", "Ноября", "Декабря", "XII", "XI", "X", _
-    "VIII", "VII", "VI", "V", "IX", "IХ", "IV", "III", "II", "I", "ХII", "ХI", _
-    "Х", "12", "11", "10", "09", "08", "07", "06", "05", "04", "03", "02", "01", _
-    "9", "8", "7", "6", "5", "4", "3", "2", "1")
-    
-    ' По автозамене в начале строки с датой будет появляться знак "?". Это флаг, что запись обработана
-    ' и больше не требуется эту строку трогать. В конце эти флаги будут удалены из текста
-    
-    ' исправляет случаи ^p[date]^p
-    For Each i In d
-        ' case XX[]XX[]XXXX
-        originalText = "(^0013)([0-9]{1;2})[\.\-\/\\ ](" & i & ")[\.\-\/\\ ]([0-9]{1;4})(^0013)"
-        ReplacedText = "\1\1?\2 " & i & ". "
-        With ActiveDocument.Content.Find
-            .Execute FindText:=originalText, MatchWildcards:=True, ReplaceWith:=ReplacedText, Replace:=wdReplaceAll
+    ' выделение всех надстрочных символов и форматирование (для исправления времени и знака градуса)
+    With ActiveDocument.Range.Find
+        .Font.Superscript = True
+        .Format = True
+        With .Replacement
+            .Font.Superscript = Falce
+            .Highlight = True
         End With
-
-        ' case XX[]XX
-        originalText = "(^0013)([0-9]{1;2})[\.\-\/\\ ](" & i & ")(^0013)"
-        ReplacedText = "\1\1?\2 " & i & ". "
-        With ActiveDocument.Content.Find
-            .Execute FindText:=originalText, MatchWildcards:=True, ReplaceWith:=ReplacedText, Replace:=wdReplaceAll
-        End With
-    Next
-    ' исправляет случаи ^p[date]
-    For Each i In d
-        ' case XX[]XX[]XXXX
-        originalText = "(^0013)([0-9]{1;2})[\.\-\/\\ ](" & i & ")[\.\-\/\\ ]([0-9]{1;4})"
-        ReplacedText = "\1\1?\2 " & i & " \4. "
-        With ActiveDocument.Content.Find
-            .Execute FindText:=originalText, MatchWildcards:=True, ReplaceWith:=ReplacedText, Replace:=wdReplaceAll
-        End With
-
-        ' case XX[]XX
-        originalText = "(^0013)([0-9]{1;2})[\.\-\/\\ ](" & i & ")"
-        ReplacedText = "\1\1?\2 " & i & ". "
-        With ActiveDocument.Content.Find
-            .Execute FindText:=originalText, MatchWildcards:=True, ReplaceWith:=ReplacedText, Replace:=wdReplaceAll
-        End With
-    Next
-
-    ' надо удалить возможные двойные пустые строки...
-    With ActiveDocument.Content.Find
-        .Execute FindText:="^p^p^p", ReplaceWith:="^p^p", Replace:=wdReplaceAll
+        .Execute Replace:=wdReplaceAll
     End With
-    ' ... и прочие артефакты
-    replaceWizzard ".. .", "..."
-    replaceWizzard ". . ", ". "
-    replaceWizzard "..", "."
-    replaceWizzard "^p?", "^p"
-    replaceWizzard "  г.", " "
-    replaceWizzard "  года.", " "
-    replaceWizzard "  год.", " "
-    replaceWizzard "  ", " "
-
+    
+    ' После прогона  через FineReader некоторые даты могут отображаться как нумированный список. Этот блок кода это исправляет
+    ' Также переводит в текст нумерованные списки
+    While ActiveDocument.Lists.Count <> 0
+        ActiveDocument.Lists(1).ConvertNumbersToText
+        ' удаление табуляции
+        replaceWizzard "^t", " "
+    Wend
+    
+    ' Дальше идёт интеграция датизатора
+    DateWizzard
+    DateWizzard
+    
     Response = MsgBox("Обработка закончена")
 
 End Sub
