@@ -26,6 +26,10 @@ Sub Стандартизатор2()
 
     Set MyRange = ActiveDocument.Content
 
+    For Each li In ActiveDocument.Lists
+        li.ConvertNumbersToText
+    Next li
+    
     ' Первоначальное форматирование текста
     ' Меняем  шрифт
     Selection.WholeStory
@@ -46,6 +50,8 @@ Sub Стандартизатор2()
         .LineSpacing = 1
     End With
 
+    replaceWizzard "^b", "^p"
+    replaceWizzard "^m", "^p"
     ' Замена абзацев
     ' "^l" -> "^p"
     replaceWizzard "^l", "^p"
@@ -163,3 +169,5 @@ Sub Стандартизатор2()
     signal = MsgBox(Message, vbInformation, "Обработка текстов")
 
 End Sub
+
+
