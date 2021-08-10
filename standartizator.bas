@@ -26,10 +26,6 @@ Sub Стандартизатор2()
 
     Set MyRange = ActiveDocument.Content
 
-    For Each li In ActiveDocument.Lists
-        li.ConvertNumbersToText
-    Next li
-    
     ' Первоначальное форматирование текста
     ' Меняем  шрифт
     Selection.WholeStory
@@ -49,7 +45,13 @@ Sub Стандартизатор2()
         .LineSpacingRule = wdLineSpaceAtLeast
         .LineSpacing = 1
     End With
+    
+    For Each li In ActiveDocument.Lists
+        li.ConvertNumbersToText
+    Next li
 
+    'ActiveDocument.Lists(1).ConvertNumbersToText
+    
     replaceWizzard "^b", "^p"
     replaceWizzard "^m", "^p"
     ' Замена абзацев
@@ -94,6 +96,7 @@ Sub Стандартизатор2()
     replaceWizzard " - ", " — "
     ' короткое тире -> длинное тире
     replaceWizzard "–", "—"
+     replaceWizzard "^p-", "^p—"
     ' [пробел][знак препинания] -> [знак препинания]
     'Dim punctuationMark1, Mark;
     punctuationMark1 = Array(".", ",", ":", ";", ")", "]", "!", "?")
@@ -169,5 +172,6 @@ Sub Стандартизатор2()
     signal = MsgBox(Message, vbInformation, "Обработка текстов")
 
 End Sub
+
 
 
