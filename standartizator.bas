@@ -72,7 +72,7 @@ Sub Стандартизатор2()
     ' " ^p" -> "^p"
     replaceWizzard " ^p", "^p", False
     ' форматирование всех концов абзаца
-    ' replaceWizzard "^p", "^p", False
+    replaceWizzard "^p", "^p", False
     ' удаление всех двойных абзацев
     replaceWizzard "^p^p^p", "^p^p", False
    
@@ -82,11 +82,6 @@ Sub Стандартизатор2()
     replaceWizzard "^-", "", False
     ' удаление табуляции
     replaceWizzard "^t", " ", False
-    
-    ' форматирование всех пробелов
-    ' replaceWizzard " ", " ", False
-    ' Замена заголовков
-    ' eplaceWizzard "###", "### ", False
   
     ' удаление всех двойных пробелов
     flag = True
@@ -102,8 +97,6 @@ Sub Стандартизатор2()
     replaceWizzard "^p-", "^p—", False
 
     ' Замена цитат
-    ' replaceWizzard ">", ">", False
-    ' replaceWizzard "^p>^p", "^p     ^p", False
     replaceWizzard "^p>", "^p", False
 
     ' Замена тире и прочей фигни
@@ -117,23 +110,33 @@ Sub Стандартизатор2()
     replaceWizzard "([IVX])—([0-9])", "\1–\2", True
     replaceWizzard "([IVX]) - ([0-9])", "\1–\2", True
     replaceWizzard "([IVX]) — ([0-9])", "\1–\2", True
+    replaceWizzard "([A-zА-я])—([0-9])", "\1-\2", True
     
     ' исправление макроса для дат 0000-00-00
     replaceWizzard "([0-9]{4})–([0-9]{2})–([0-9]{2})", "\1-\2-\3", True
 
     ' удаление лишнего пробела между инициалами
+    replaceWizzard "([А-Я].)([А-Я][a-я])", "\1 \2", True
     replaceWizzard "([А-Я].) ([А-Я].)", "\1\2", True
+    ' добавление пробела между цифрой и некоторыми буквами и выделение этих мест для проверки
+    replaceWizzard "([0-9])([гмч])", "\1 \2", True
+    highlighting "[0-9] [гмч]"
     ' пробел-дефис-пробел -> длинное тире
     replaceWizzard " - ", " — ", False
     ' пробел-короткое тире-пробел -> длинное тире
     replaceWizzard " – ", " — ", False
+    ' Замена на длинное тире в конце и начале абзаца
+    replaceWizzard "-^p", "—^p", False
+    replaceWizzard "–^p", "—^p", False
+    replaceWizzard "^p-", "^p—", False
+    replaceWizzard "^p–", "^p—", False
 
     ' удаление лишних пробелов в тегах
     replaceWizzard "[" & Chr(34) & "»”][>] ", "" & Chr(34) & ">", True
     replaceWizzard " </", "</", False
     replaceWizzard "=[" & Chr(34) & "«“] ([0-9]{1;10})", "=" & Chr(34) & "\1", True
     replaceWizzard "([0-9]{1;10}) [" & Chr(34) & "»”] ", "\1" & Chr(34) & " ", True
-    replaceWizzard "[A-я]<персона", "[A-я] <персона", True
+    replaceWizzard "([A-я])<персона ", "\1 <персона ", True
     replaceWizzard "персона[>]([A-я])", "персона> \1", True
 
     ' [пробел][знак препинания] -> [знак препинания]
@@ -162,6 +165,7 @@ Sub Стандартизатор2()
     highlighting "[A-я0-9]— [A-я]"  ' длинное тире
     highlighting "[A-я0-9] —[A-я]"
     highlighting "[A-я0-9]—[A-я]"
+    highlighting "[ A-zА-я][ A-zА-я]^0013[A-zА-я]"
 
     ' удаление лишних пробелов в частицах и некоторых предлогах
     particles = Array("то", "таки", "нибудь", "ка", "за", "под")
