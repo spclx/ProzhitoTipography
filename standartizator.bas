@@ -1,12 +1,15 @@
-Sub replaceWizzard(originalText, replasedText, wildcard)
+Attribute VB_Name = "Module1"
+Sub replaceWizzard(originalText, replasedText, wildcard, formatKey)
     Selection.Find.ClearFormatting
     Selection.Find.Replacement.ClearFormatting
-    'With Selection.Find.Replacement.Font
-    '    .Bold = False
-    '    .Italic = False
-    '    .Underline = False
-    '    .StrikeThrough = False
-    'End With
+    If formatKey = True Then
+        With Selection.Find.Replacement.Font
+            .Bold = False
+            .Italic = False
+            .Underline = False
+            .StrikeThrough = False
+        End With
+    End If
     With Selection.Find
         .Text = originalText
         .Replacement.Text = replasedText
@@ -64,80 +67,80 @@ Sub Стандартизатор2()
     End With
     
     ' Избавление от разрывов абзацев
-    replaceWizzard "^b", "^p", False
-    replaceWizzard "^m", "^p", False
+    replaceWizzard "^b", "^p", False, True
+    replaceWizzard "^m", "^p", False, True
     ' Замена абзацев
     ' "^l" -> "^p"
-    replaceWizzard "^l", "^p", False
+    replaceWizzard "^l", "^p", False, True
     ' " ^p" -> "^p"
-    replaceWizzard " ^p", "^p", False
+    replaceWizzard " ^p", "^p", False, True
     ' форматирование всех концов абзаца
-    replaceWizzard "^p", "^p", False
+    replaceWizzard "^p", "^p", False, True
     ' удаление всех двойных абзацев
-    replaceWizzard "^p^p^p", "^p^p", False
+    replaceWizzard "^p^p^p", "^p^p", False, True
    
     ' убираются специальные ненужные знаки
     ' удаление неразрывных пробелов
-    replaceWizzard "^s", " ", False
-    replaceWizzard "^-", "", False
+    replaceWizzard "^s", " ", False, False
+    replaceWizzard "^-", "", False, True
     ' удаление табуляции
-    replaceWizzard "^t", " ", False
+    replaceWizzard "^t", " ", False, True
   
     ' удаление всех двойных пробелов
     flag = True
     While flag = True
         Set MyRange = ActiveDocument.Content
-        replaceWizzard "  ", " ", False
+        replaceWizzard "  ", " ", False, False
         MyRange.Find.Execute FindText:="  "
         If MyRange.Find.Found = False Then flag = False
     Wend
     
     ' "^p " -> "^p"
-    replaceWizzard "^p ", "^p", False
-    replaceWizzard "^p-", "^p—", False
+    replaceWizzard "^p ", "^p", False, True
+    replaceWizzard "^p-", "^p—", False, True
 
     ' Замена цитат
-    replaceWizzard "^p>", "^p", False
+    replaceWizzard "^p>", "^p", False, True
 
     ' Замена тире и прочей фигни
     ' короткое тире между цифрами
-    replaceWizzard "([0-9])-([0-9])", "\1–\2", True
-    replaceWizzard "([0-9]) - ([0-9])", "\1–\2", True
-    replaceWizzard "([0-9]) – ([0-9])", "\1–\2", True
-    replaceWizzard "([0-9])—([0-9])", "\1–\2", True
-    replaceWizzard "([0-9]) — ([0-9])", "\1–\2", True
-    replaceWizzard "([IVX])-([0-9])", "\1–\2", True
-    replaceWizzard "([IVX])—([0-9])", "\1–\2", True
-    replaceWizzard "([IVX]) - ([0-9])", "\1–\2", True
-    replaceWizzard "([IVX]) — ([0-9])", "\1–\2", True
-    replaceWizzard "([A-zА-я])—([0-9])", "\1-\2", True
+    replaceWizzard "([0-9])-([0-9])", "\1–\2", True, False
+    replaceWizzard "([0-9]) - ([0-9])", "\1–\2", True, False
+    replaceWizzard "([0-9]) – ([0-9])", "\1–\2", True, False
+    replaceWizzard "([0-9])—([0-9])", "\1–\2", True, False
+    replaceWizzard "([0-9]) — ([0-9])", "\1–\2", True, False
+    replaceWizzard "([IVX])-([0-9])", "\1–\2", True, False
+    replaceWizzard "([IVX])—([0-9])", "\1–\2", True, False
+    replaceWizzard "([IVX]) - ([0-9])", "\1–\2", True, False
+    replaceWizzard "([IVX]) — ([0-9])", "\1–\2", True, False
+    replaceWizzard "([A-zА-я])—([0-9])", "\1-\2", True, False
     
     ' исправление макроса для дат 0000-00-00
-    replaceWizzard "([0-9]{4})–([0-9]{2})–([0-9]{2})", "\1-\2-\3", True
+    replaceWizzard "([0-9]{4})–([0-9]{2})–([0-9]{2})", "\1-\2-\3", True, False
 
     ' удаление лишнего пробела между инициалами
-    replaceWizzard "([А-Я].)([А-Я][a-я])", "\1 \2", True
-    replaceWizzard "([А-Я].) ([А-Я].)", "\1\2", True
+    replaceWizzard "([А-Я].)([А-Я][a-я])", "\1 \2", True, False
+    replaceWizzard "([А-Я].) ([А-Я].)", "\1\2", True, False
     ' добавление пробела между цифрой и некоторыми буквами и выделение этих мест для проверки
-    replaceWizzard "([0-9])([гмч])", "\1 \2", True
+    replaceWizzard "([0-9])([гмч])", "\1 \2", True, False
     highlighting "[0-9] [гмч]"
     ' пробел-дефис-пробел -> длинное тире
-    replaceWizzard " - ", " — ", False
+    replaceWizzard " - ", " — ", False, False
     ' пробел-короткое тире-пробел -> длинное тире
-    replaceWizzard " – ", " — ", False
+    replaceWizzard " – ", " — ", False, False
     ' Замена на длинное тире в конце и начале абзаца
-    replaceWizzard "-^p", "—^p", False
-    replaceWizzard "–^p", "—^p", False
-    replaceWizzard "^p-", "^p—", False
-    replaceWizzard "^p–", "^p—", False
+    replaceWizzard "-^p", "—^p", False, False
+    replaceWizzard "–^p", "—^p", False, False
+    replaceWizzard "^p-", "^p—", False, False
+    replaceWizzard "^p–", "^p—", False, False
 
     ' удаление лишних пробелов в тегах
-    replaceWizzard "[" & Chr(34) & "»”][>] ", "" & Chr(34) & ">", True
-    replaceWizzard " </", "</", False
-    replaceWizzard "=[" & Chr(34) & "«“] ([0-9]{1;10})", "=" & Chr(34) & "\1", True
-    replaceWizzard "([0-9]{1;10}) [" & Chr(34) & "»”] ", "\1" & Chr(34) & " ", True
-    replaceWizzard "([A-я])<персона ", "\1 <персона ", True
-    replaceWizzard "персона[>]([A-я])", "персона> \1", True
+    replaceWizzard "[" & Chr(34) & "»”][>] ", "" & Chr(34) & ">", True, False
+    replaceWizzard " </", "</", False, False
+    'replaceWizzard "=[" & Chr(34) & "«“] ([0-9]{1;10})", "=" & Chr(34) & "\1", True
+    'replaceWizzard "([0-9]{1;10}) [" & Chr(34) & "»”] ", "\1" & Chr(34) & " ", True
+    replaceWizzard "([A-я])<персона ", "\1 <персона ", True, False
+    replaceWizzard "персона[>]([A-я])", "персона> \1", True, False
 
     ' [пробел][знак препинания] -> [знак препинания]
     'Dim punctuationMark1, Mark;
@@ -145,14 +148,14 @@ Sub Стандартизатор2()
     For Each Mark In punctuationMark1
         oT = " " + Mark
         rT = Mark
-        replaceWizzard oT, rT, False
+        replaceWizzard oT, rT, False, False
     Next
     ' [знак препинания][пробел] -> [знак препинания]
     punctuationMark2 = Array("(", "[")
     For Each Mark In punctuationMark2
         oT = Mark + " "
         rT = Mark
-        replaceWizzard oT, rT, False
+        replaceWizzard oT, rT, False, False
     Next
 
     ' выделение в тексте всех нестандартных случаев тире и дефисов
@@ -172,7 +175,7 @@ Sub Стандартизатор2()
     For Each Particle In particles
         oT = "- " + Particle
         rT = "-" + Particle
-        replaceWizzard oT, rT, False
+        replaceWizzard oT, rT, False, False
     Next
 
 End Sub
